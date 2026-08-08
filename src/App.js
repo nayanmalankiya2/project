@@ -1,24 +1,32 @@
-import logo from './logo.svg';
+import React from 'react';
+import { AuthProvider, useAuth } from './auth/AuthContext';
+import Login from './pages/Login';
+import AdminDashboard from './pages/AdminDashboard';
+import FacultyDashboard from './pages/FacultyDashboard';
+import StudentDashboard from './pages/StudentDashboard';
 import './App.css';
+
+const DashboardRouter = () => {
+  const { user } = useAuth();
+  if (!user) return <Login />;
+
+  switch (user.role) {
+    case 'admin':
+      return <AdminDashboard />;
+    case 'faculty':
+      return <FacultyDashboard />;
+    case 'student':
+      return <StudentDashboard />;
+    default:
+      return <Login />;
+  }
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <DashboardRouter />
+    </AuthProvider>
   );
 }
 
