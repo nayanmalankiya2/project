@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+# Student Academic Performance Index (SAPI)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack **Student Academic Performance Index** application with role-based access:
+- **Admin** – Full control (students, faculty, subjects, marks – all CRUD)
+- **Faculty** – Student control only (add/edit/delete students)
+- **Student** – View only (profile, marks, performance index)
 
-## Available Scripts
+Built with **React (frontend)** + **Node.js/Express/MongoDB (backend)**.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 📋 Requirements (first time only)
+1. **Node.js** installed (v16+)
+2. **MongoDB** installed and running locally
+   - Default: `mongodb://127.0.0.1:27017`
+   - Or set `MONGO_URI` in the environment / `.env`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 How to Run the App
 
-### `npm test`
+### Open a terminal in the project folder (`d:/node/project`)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Step 1 – Install dependencies (only the first time)
+```bash
+npm install
+```
 
-### `npm run build`
+### Step 2 – Start both servers (backend + frontend) with ONE command
+```bash
+npm run dev
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This runs:
+- **Backend** on `http://localhost:5000`
+- **Frontend** on `http://localhost:3000`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Step 3 – Open the app
+Go to **http://localhost:3000** in your browser.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🔑 Demo Login Credentials
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+| Role     | Username | Password      |
+|----------|----------|---------------|
+| Admin    | `admin`  | `admin123`    |
+| Faculty  | `faculty`| `faculty123`  |
+| Student  | `student`| `student123`  |
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🗄️ Database (MongoDB)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+If you want to **reset / re-seed** the database with fresh demo data:
+```bash
+npm run seed
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🛠️ Other Scripts
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| Command          | What it does                                  |
+|------------------|-----------------------------------------------|
+| `npm run dev`    | Run backend + frontend together (recommended) |
+| `npm run server` | Run only the backend (port 5000)              |
+| `npm start`      | Run only the frontend (port 3000)             |
+| `npm run seed`   | Reset & re-seed the database                  |
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📁 Project Structure
+```
+server/
+  config/db.js        # MongoDB connection
+  models/             # User, Student, Subject, Mark schemas
+  routes/             # auth, user, student, subject, mark APIs
+  middleware/         # JWT auth & role authorization
+  seed.js             # Demo data seeder
+src/
+  api/                # API client (calls backend)
+  auth/               # Auth context (login/logout/session)
+  components/         # UI components
+  pages/              # Login, Admin, Faculty, Student dashboards
+  App.js              # Routing & auth guards

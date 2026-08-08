@@ -4,10 +4,11 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Admin and Faculty can manage subjects
-router.use(protect, authorize('admin', 'faculty'));
+// All authenticated users (admin, faculty, student) can view subjects
+router.use(protect);
 
 // @route   GET /api/subjects
+// @desc    Get all subjects (any authenticated user, including students for view-only)
 router.get('/', async (req, res) => {
   try {
     const subjects = await Subject.find();
@@ -18,7 +19,8 @@ router.get('/', async (req, res) => {
 });
 
 // @route   POST /api/subjects
-router.post('/', async (req, res) => {
+// @desc    Create a subject (admin/faculty only)
+router.post('/', authorize('admin', 'faculty'), async (req, res) => {
   try {
     const subject = await Subject.create(req.body);
     res.status(201).json(subject);
@@ -28,7 +30,8 @@ router.post('/', async (req, res) => {
 });
 
 // @route   PUT /api/subjects/:id
-router.put('/:id', async (req, res) => {
+// @desc    Update a subject (admin/faculty only)
+router.put('/:id', authorize('admin', 'faculty'), async (req, res) => {
   try {
     const subject = await Subject.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!subject) return res.status(404).json({ message: 'Subject not found' });
@@ -39,7 +42,8 @@ router.put('/:id', async (req, res) => {
 });
 
 // @route   DELETE /api/subjects/:id
-router.delete('/:id', async (req, res) => {
+// @desc    Delete a subject (admin only)
+router.delete('/:id', authorize('admin'), async (req, res) => {
   try {
     const subject = await Subject.findByIdAndDelete(req.params.id);
     if (!subject) return res.status(404).json({ message: 'Subject not found' });

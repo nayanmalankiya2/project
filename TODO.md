@@ -3,20 +3,18 @@
 - [x] Understand requirements
 - [x] Plan approved (MongoDB full-stack)
 - [x] Install backend dependencies
-- [x] Create server/config/db.js (MongoDB connection)
-- [x] Create server/models (User, Student, Subject, Mark)
-- [x] Create server/routes (auth, users, students, subjects, marks)
-- [x] Create server/seed.js (demo data)
-- [x] Create server/index.js (Express server)
-- [x] Create React API client (src/api)
-- [x] Create AuthContext
-- [x] Create components (Navbar, StudentForm, PerformanceCard, StudentsManager, MarksManager, UsersManager, SubjectsManager)
-- [x] Create pages (Login, Admin, Faculty, Student)
+- [x] Create server config/models/routes/seed (MongoDB backend)
+- [x] Create React API client, AuthContext, components, pages
 - [x] Update App.js with routing & auth
 - [x] Add styling
-- [x] Test build (frontend compiles successfully)
-- [x] Change login to use username + password (instead of email)
-- [x] Faculty can now manage students, marks, AND subjects (full control)
-- [x] Adding a student now includes username & password to auto-create the student login account
-- [x] Marks management now opens a separate modal page for editing (like student edit)
-- [x] Faculty full control (students, marks, subjects)
+- [x] Fix: StudentForm sending whole object corrupting user link
+- [x] Fix (ROOT CAUSE): Students were blocked from fetching subjects (403)
+- [x] FIX (LOGIN): Re-seeded database (corrupted student usernames) + restarted backend server
+- [x] Verified all 3 logins work via API (admin/faculty/student)
+- [x] Backend running on port 5000
+- [x] Frontend running on port 3000
+
+## Demo Credentials
+- Admin:   admin / admin123
+- Faculty: faculty / faculty123
+- Student: student / student123

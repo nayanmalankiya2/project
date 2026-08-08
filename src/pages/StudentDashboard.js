@@ -11,15 +11,26 @@ const StudentDashboard = () => {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
     const load = async () => {
       try {
-        const [markRes, subRes] = await Promise.all([api.getMarks(), api.getSubjects()]);
+        const [markRes, subRes, profileRes] = await Promise.all([
+          api.getMarks(),
+          api.getSubjects(),
+          api.getMyStudentProfile(),
+        ]);
         setMarks(markRes.data);
         setSubjects(subRes.data);
-        setStudent({ name: user.name, rollNumber: '—', className: '—' });
+        const profile = profileRes.data;
+        setStudent({
+          name: profile.name || user.name,
+          rollNumber: profile.rollNumber || '—',
+          className: profile.className || '—',
+          email: profile.email || '',
+        });
       } catch (err) {
-        // ignore
+        // fallback to basic info if profile fetch fails
+        setStudent({ name: user.name, rollNumber: '—', className: '—' });
       } finally {
         setLoading(false);
       }

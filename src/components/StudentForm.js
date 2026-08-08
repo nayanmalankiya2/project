@@ -11,8 +11,23 @@ const initialForm = {
   password: '',
 };
 
+// Only keep the clean editable fields (strip out Mongoose-only fields)
+const sanitize = (data) => {
+  if (!data) return initialForm;
+  return {
+    name: data.name || '',
+    rollNumber: data.rollNumber || '',
+    className: data.className || '',
+    email: data.email || '',
+    phone: data.phone || '',
+    address: data.address || '',
+    username: (data.user && data.user.username) || data.username || '',
+    password: '',
+  };
+};
+
 const StudentForm = ({ onSubmit, onCancel, initialData }) => {
-  const [form, setForm] = useState(initialData || initialForm);
+  const [form, setForm] = useState(sanitize(initialData));
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
@@ -26,7 +41,18 @@ const StudentForm = ({ onSubmit, onCancel, initialData }) => {
       return;
     }
     setError('');
-    onSubmit(form);
+    // Send only clean fields
+    const payload = {
+      name: form.name,
+      rollNumber: form.rollNumber,
+      className: form.className,
+      email: form.email,
+      phone: form.phone,
+      address: form.address,
+      username: form.username,
+      password: form.password || undefined,
+    };
+    onSubmit(payload);
   };
 
   return (

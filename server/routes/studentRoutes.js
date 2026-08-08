@@ -6,13 +6,27 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
+// @route   GET /api/students/me
+// @desc    Get the logged-in student's own profile (accessible by any authenticated user)
+router.get('/me', protect, async (req, res) => {
+  try {
+    const student = await Student.findOne({ user: req.user._id }).populate('user', 'name username email');
+    if (!student) {
+      return res.status(404).json({ message: 'Student profile not found' });
+    }
+    res.json(student);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Admin and Faculty can manage students (faculty = student control only)
 router.use(protect, authorize('admin', 'faculty'));
 
 // @route   GET /api/students
 router.get('/', async (req, res) => {
   try {
-    const students = await Student.find().populate('user', 'name email');
+    const students = await Student.find().populate('user', 'name username email');
     res.json(students);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -22,7 +36,7 @@ router.get('/', async (req, res) => {
 // @route   GET /api/students/:id
 router.get('/:id', async (req, res) => {
   try {
-    const student = await Student.findById(req.params.id).populate('user', 'name email');
+    const student = await Student.findById(req.params.id).populate('user', 'name username email');
     if (!student) return res.status(404).json({ message: 'Student not found' });
     res.json(student);
   } catch (err) {
