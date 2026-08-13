@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
+    "@upstash/context7-mcp": "^4.0.2",
     "axios": "^1.19.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
@@ -19,7 +20,7 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-"scripts": {
+  "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -49,5 +50,17 @@
   "devDependencies": {
     "concurrently": "^10.0.4",
     "nodemon": "^3.1.14"
+  },
+  "description": "A full-stack **Student Academic Performance Index** application with role-based access: - **Admin** – Full control (students, faculty, subjects, marks – all CRUD) - **Faculty** – Student control only (add/edit/delete students) - **Student** – View only (profile, marks, performance index)",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nayanmalankiya2/project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nayanmalankiya2/project/issues"
   }
 }

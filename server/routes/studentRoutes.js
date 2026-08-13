@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
       const user = await User.create({
         name: studentData.name,
         username,
-        email: studentData.email || '',
+        email: studentData.email || null,
         password: hashedPassword,
         role: 'student',
       });
@@ -95,7 +95,7 @@ router.put('/:id', async (req, res) => {
         user = await User.create({
           name: studentData.name,
           username,
-          email: studentData.email || '',
+          email: studentData.email || null,
           password: await bcrypt.hash(password || 'student123', salt),
           role: 'student',
         });

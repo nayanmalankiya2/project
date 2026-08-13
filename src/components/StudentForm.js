@@ -46,7 +46,7 @@ const StudentForm = ({ onSubmit, onCancel, initialData }) => {
       name: form.name,
       rollNumber: form.rollNumber,
       className: form.className,
-      email: form.email,
+      email: form.email || null,
       phone: form.phone,
       address: form.address,
       username: form.username,

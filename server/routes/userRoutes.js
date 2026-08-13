@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 const { name, username, email, password, role } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await User.create({ name, username, email, password: hashedPassword, role });
+    const user = await User.create({ name, username, email: email || null, password: hashedPassword, role });
     res.status(201).json({ _id: user._id, name: user.name, username: user.username, email: user.email, role: user.role });
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -37,8 +37,10 @@ const { name, username, email, password, role } = req.body;
 // @desc    Update a user
 router.put('/:id', async (req, res) => {
   try {
-    const { password, ...rest } = req.body;
+    const { password, email, ...rest } = req.body;
     let updates = rest;
+    if (email) updates.email = email;
+    else if ('email' in req.body) updates.email = null;
     if (password) {
       const salt = await bcrypt.genSalt(10);
       updates.password = await bcrypt.hash(password, salt);
