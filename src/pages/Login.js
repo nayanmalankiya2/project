@@ -61,6 +61,7 @@ const Login = () => {
           </button>
         </form>
 
+        {/* Demo Accounts section - commented out
         <div className="demo-accounts">
           <p className="demo-title">Demo Accounts (click to fill)</p>
           <div className="demo-buttons">
@@ -75,6 +76,7 @@ const Login = () => {
             </button>
           </div>
         </div>
+        */}
       </div>
     </div>
   );
