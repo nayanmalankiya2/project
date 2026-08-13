@@ -21,10 +21,10 @@ const Login = () => {
     }
   };
 
-  const quickFill = (un, pw) => {
+  /*const quickFill = (un, pw) => {
     setUsername(un);
     setPassword(pw);
-  };
+  };*/
 
   return (
     <div className="login-page">
