@@ -8,7 +8,8 @@ const router = express.Router();
 
 router.use(protect);
 
-// Admin & Faculty can create/update/delete marks
+// Faculty can create/update/delete marks (admin is view-only)
+// Admin can view all marks
 // Student can view their own marks
 
 // @route   GET /api/marks
@@ -30,8 +31,8 @@ router.get('/', async (req, res) => {
 });
 
 // @route   POST /api/marks
-// @desc    Add marks (admin/faculty)
-router.post('/', authorize('admin', 'faculty'), async (req, res) => {
+// @desc    Add marks (faculty only)
+router.post('/', authorize('faculty'), async (req, res) => {
   try {
     const mark = await Mark.create(req.body);
     res.status(201).json(mark);
@@ -41,8 +42,8 @@ router.post('/', authorize('admin', 'faculty'), async (req, res) => {
 });
 
 // @route   PUT /api/marks/:id
-// @desc    Update marks (admin/faculty)
-router.put('/:id', authorize('admin', 'faculty'), async (req, res) => {
+// @desc    Update marks (faculty only)
+router.put('/:id', authorize('faculty'), async (req, res) => {
   try {
     const mark = await Mark.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!mark) return res.status(404).json({ message: 'Mark not found' });
@@ -53,8 +54,8 @@ router.put('/:id', authorize('admin', 'faculty'), async (req, res) => {
 });
 
 // @route   DELETE /api/marks/:id
-// @desc    Delete marks (admin/faculty)
-router.delete('/:id', authorize('admin', 'faculty'), async (req, res) => {
+// @desc    Delete marks (faculty only)
+router.delete('/:id', authorize('faculty'), async (req, res) => {
   try {
     const mark = await Mark.findByIdAndDelete(req.params.id);
     if (!mark) return res.status(404).json({ message: 'Mark not found' });

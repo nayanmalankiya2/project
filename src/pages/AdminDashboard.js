@@ -31,7 +31,7 @@ const AdminDashboard = () => {
     { id: 'students', label: '👨‍🎓 Students', component: <StudentsManager canEdit /> },
     { id: 'users', label: '👤 Users', component: <UsersManager /> },
     { id: 'subjects', label: '📚 Subjects', component: <SubjectsManager /> },
-    { id: 'marks', label: '📝 Marks', component: <MarksManager /> },
+    { id: 'marks', label: '📝 Marks', component: <MarksManager canEdit={false} /> },
   ];
 
   return (

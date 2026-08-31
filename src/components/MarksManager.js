@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import * as api from '../api';
 import MarksForm from './MarksForm';
 
-const MarksManager = () => {
+const MarksManager = ({ canEdit = false }) => {
   const [students, setStudents] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [marks, setMarks] = useState([]);
@@ -88,7 +88,7 @@ const MarksManager = () => {
   return (
     <div className="panel">
       <div className="panel-header">
-        <h2>📝 Marks Management</h2>
+        <h2>📝 Marks Management {!canEdit && <span className="badge badge-neutral">View Only</span>}</h2>
       </div>
       {error && <div className="alert alert-error">{error}</div>}
       {loading ? (
@@ -102,12 +102,12 @@ const MarksManager = () => {
                 {subjects.map((sub) => (
                   <th key={sub._id}>{sub.name} <span className="th-sub">({sub.code})</span></th>
                 ))}
-                <th>Actions</th>
+                {canEdit && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
               {students.length === 0 && (
-                <tr><td colSpan={subjects.length + 2} className="empty-cell">No students found</td></tr>
+                <tr><td colSpan={subjects.length + (canEdit ? 2 : 1)} className="empty-cell">No students found</td></tr>
               )}
               {students.map((student) => (
                 <tr key={student._id}>
@@ -131,29 +131,31 @@ const MarksManager = () => {
                       </td>
                     );
                   })}
-                  <td className="actions-cell">
-                    <button
-                      className="btn-icon"
-                      title="Edit Marks"
-                      onClick={() => openForm(student)}
-                    >
-                      ✏️
-                    </button>
-                    {studentHasMarks(student._id) && (
+                  {canEdit && (
+                    <td className="actions-cell">
                       <button
-                        className="btn-icon btn-danger"
-                        title="Clear all marks"
-                        onClick={() => {
-                          const all = studentMarks(student._id);
-                          if (window.confirm(`Delete all marks for ${student.name}?`)) {
-                            all.forEach((m) => handleDeleteMark(m._id));
-                          }
-                        }}
+                        className="btn-icon"
+                        title="Edit Marks"
+                        onClick={() => openForm(student)}
                       >
-                        🗑️
+                        ✏️
                       </button>
-                    )}
-                  </td>
+                      {studentHasMarks(student._id) && (
+                        <button
+                          className="btn-icon btn-danger"
+                          title="Clear all marks"
+                          onClick={() => {
+                            const all = studentMarks(student._id);
+                            if (window.confirm(`Delete all marks for ${student.name}?`)) {
+                              all.forEach((m) => handleDeleteMark(m._id));
+                            }
+                          }}
+                        >
+                          🗑️
+                        </button>
+                      )}
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
