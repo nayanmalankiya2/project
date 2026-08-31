@@ -39,8 +39,17 @@ const login = async (username, password) => {
     setUser(null);
   };
 
+  const updateProfile = (updates) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...updates };
+      localStorage.setItem('user', JSON.stringify(next));
+      return next;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, updateProfile, loading }}>
       {children}
     </AuthContext.Provider>
   );

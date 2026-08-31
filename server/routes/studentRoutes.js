@@ -20,6 +20,48 @@ router.get('/me', protect, async (req, res) => {
   }
 });
 
+// @route   PUT /api/students/me
+// @desc    Update own profile (students only): name, email, phone, address — NOT username or password
+router.put('/me', protect, authorize('student'), async (req, res) => {
+  try {
+    const student = await Student.findOne({ user: req.user._id });
+    if (!student) {
+      return res.status(404).json({ message: 'Student profile not found' });
+    }
+
+    // Whitelist — students can only update these fields
+    const { name, email } = req.body;
+    let changed = false;
+
+    ['name', 'email', 'phone', 'address'].forEach((key) => {
+      if (req.body[key] !== undefined) {
+        student[key] = req.body[key];
+        changed = true;
+      }
+    });
+
+    if (!changed) {
+      return res.status(400).json({ message: 'Nothing to update' });
+    }
+
+    await student.save();
+
+    // Sync the linked login account (name/email only — username & password are never touched)
+    if (student.user) {
+      const updates = {};
+      if (name !== undefined) updates.name = name;
+      if (email !== undefined) updates.email = email;
+      if (Object.keys(updates).length > 0) {
+        await User.findByIdAndUpdate(student.user, updates);
+      }
+    }
+
+    res.json(student);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 // Admin and Faculty can manage students (faculty = student control only)
 router.use(protect, authorize('admin', 'faculty'));
 

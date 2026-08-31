@@ -1,7 +1,6 @@
 const express = require('express');
 const Mark = require('../models/Mark');
 const Student = require('../models/Student');
-const Subject = require('../models/Subject');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 const router = express.Router();

@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import PerformanceCard, { computePerformance } from '../components/PerformanceCard';
+import PerformanceCard from '../components/PerformanceCard';
 import * as api from '../api';
 import { useAuth } from '../auth/AuthContext';
+import StudentProfileForm from '../components/StudentProfileForm';
 
 const StudentDashboard = () => {
   const { user } = useAuth();
   const [marks, setMarks] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [student, setStudent] = useState(null);
+  const [showProfile, setShowProfile] = useState(false);
   const [loading, setLoading] = useState(true);
 
 useEffect(() => {
@@ -27,6 +29,8 @@ useEffect(() => {
           rollNumber: profile.rollNumber || '—',
           className: profile.className || '—',
           email: profile.email || '',
+          phone: profile.phone || '',
+          address: profile.address || '',
         });
       } catch (err) {
         // fallback to basic info if profile fetch fails
@@ -37,12 +41,6 @@ useEffect(() => {
     };
     load();
   }, [user]);
-
-  const perf = computePerformance(marks);
-  const subjectPass = (subId) => {
-    const m = marks.find((x) => x.subject?._id === subId);
-    return m ? m.marksObtained : null;
-  };
 
   return (
     <div className="dashboard">
@@ -55,9 +53,20 @@ useEffect(() => {
             <div className="student-hero-info">
               <h2>Welcome, {user.name} 👋</h2>
               <p>Your academic performance index and marks</p>
+              <button className="btn btn-primary btn-hero" onClick={() => setShowProfile(true)}>
+                👤 View Profile
+              </button>
             </div>
             <PerformanceCard student={student} marks={marks} />
           </div>
+
+          {showProfile && (
+            <StudentProfileForm
+              profile={student}
+              onSaved={(updated) => setStudent((prev) => ({ ...prev, ...updated }))}
+              onClose={() => setShowProfile(false)}
+            />
+          )}
 
           <div className="panel">
             <div className="panel-header"><h2>📋 Subject-wise Marks</h2></div>
