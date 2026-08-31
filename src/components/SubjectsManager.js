@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import * as api from '../api';
 
-const SubjectsManager = () => {
+const SubjectsManager = ({ canEdit = false }) => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -62,10 +62,12 @@ const SubjectsManager = () => {
   return (
     <div className="panel">
       <div className="panel-header">
-        <h2>📚 Subjects Management</h2>
-        <button className="btn btn-primary" onClick={() => { resetForm(); setShowForm(true); }}>
-          + Add Subject
-        </button>
+        <h2>📚 Subjects Management {!canEdit && <span className="badge badge-neutral">View Only</span>}</h2>
+        {canEdit && (
+          <button className="btn btn-primary" onClick={() => { resetForm(); setShowForm(true); }}>
+            + Add Subject
+          </button>
+        )}
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -90,7 +92,7 @@ const SubjectsManager = () => {
                 <th>Subject</th>
                 <th>Code</th>
                 <th>Max Marks</th>
-                <th>Actions</th>
+                {canEdit && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -99,15 +101,17 @@ const SubjectsManager = () => {
                   <td><strong>{s.name}</strong></td>
                   <td><span className="badge badge-neutral">{s.code}</span></td>
                   <td>{s.maxMarks}</td>
-                  <td className="actions-cell">
-                    <button className="btn-icon" title="Edit"
-                      onClick={() => { setEditing(s); setForm({ name: s.name, code: s.code, maxMarks: s.maxMarks }); setShowForm(true); }}>
-                      ✏️
-                    </button>
-                    <button className="btn-icon btn-danger" title="Delete" onClick={() => handleDelete(s._id)}>
-                      🗑️
-                    </button>
-                  </td>
+                  {canEdit && (
+                    <td className="actions-cell">
+                      <button className="btn-icon" title="Edit"
+                        onClick={() => { setEditing(s); setForm({ name: s.name, code: s.code, maxMarks: s.maxMarks }); setShowForm(true); }}>
+                        ✏️
+                      </button>
+                      <button className="btn-icon btn-danger" title="Delete" onClick={() => handleDelete(s._id)}>
+                        🗑️
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

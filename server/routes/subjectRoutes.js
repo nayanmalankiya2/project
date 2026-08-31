@@ -19,8 +19,8 @@ router.get('/', async (req, res) => {
 });
 
 // @route   POST /api/subjects
-// @desc    Create a subject (admin/faculty only)
-router.post('/', authorize('admin', 'faculty'), async (req, res) => {
+// @desc    Create a subject (admin only)
+router.post('/', authorize('admin'), async (req, res) => {
   try {
     const subject = await Subject.create(req.body);
     res.status(201).json(subject);
@@ -30,8 +30,8 @@ router.post('/', authorize('admin', 'faculty'), async (req, res) => {
 });
 
 // @route   PUT /api/subjects/:id
-// @desc    Update a subject (admin/faculty only)
-router.put('/:id', authorize('admin', 'faculty'), async (req, res) => {
+// @desc    Update a subject (admin only)
+router.put('/:id', authorize('admin'), async (req, res) => {
   try {
     const subject = await Subject.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!subject) return res.status(404).json({ message: 'Subject not found' });

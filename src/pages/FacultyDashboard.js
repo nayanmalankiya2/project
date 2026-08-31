@@ -38,7 +38,7 @@ const FacultyDashboard = () => {
   const tabs = [
     { id: 'students', label: '👨‍🎓 Students', component: <StudentsManager canEdit /> },
     { id: 'marks', label: '📝 Marks', component: <MarksManager canEdit /> },
-    { id: 'subjects', label: '📚 Subjects', component: <SubjectsManager canEdit /> },
+    { id: 'subjects', label: '📚 Subjects', component: <SubjectsManager canEdit={false} /> },
     { id: 'performance', label: '📊 Performance Index', component: <PerformanceView students={students} marks={marks} /> },
   ];
 
