@@ -3,14 +3,13 @@ import Navbar from '../components/Navbar';
 import PerformanceCard from '../components/PerformanceCard';
 import * as api from '../api';
 import { useAuth } from '../auth/AuthContext';
-import StudentProfileForm from '../components/StudentProfileForm';
+// REMOVED: import StudentProfileForm from '../components/StudentProfileForm'; - students cannot edit profile
 
 const StudentDashboard = () => {
   const { user } = useAuth();
   const [marks, setMarks] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [student, setStudent] = useState(null);
-  const [showProfile, setShowProfile] = useState(false);
   const [loading, setLoading] = useState(true);
 
 useEffect(() => {
@@ -53,20 +52,9 @@ useEffect(() => {
             <div className="student-hero-info">
               <h2>Welcome, {user.name} 👋</h2>
               <p>Your academic performance index and marks</p>
-              <button className="btn btn-primary btn-hero" onClick={() => setShowProfile(true)}>
-                👤 View Profile
-              </button>
             </div>
             <PerformanceCard student={student} marks={marks} />
           </div>
-
-          {showProfile && (
-            <StudentProfileForm
-              profile={student}
-              onSaved={(updated) => setStudent((prev) => ({ ...prev, ...updated }))}
-              onClose={() => setShowProfile(false)}
-            />
-          )}
 
           <div className="panel">
             <div className="panel-header"><h2>📋 Subject-wise Marks</h2></div>

@@ -41,7 +41,7 @@ export const computePerformance = (marks) => {
     totalMax,
     percentage: percentage.toFixed(2),
     subjectsCovered,
-    index: (index * 10).toFixed(1),
+    index: index.toFixed(1),
     grade,
   };
 };

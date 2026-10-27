@@ -9,6 +9,7 @@ const UsersManager = () => {
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [search, setSearch] = useState('');
   const [form, setForm] = useState({ name: '', username: '', email: '', password: '', role: 'student' });
 
   const roleLabels = { admin: 'Admin', faculty: 'Faculty', student: 'Student' };
@@ -63,10 +64,26 @@ const UsersManager = () => {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const filtered = users.filter(
+    (u) => u.name.toLowerCase().includes(search.toLowerCase()) ||  
+           u.username.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="panel">
       <div className="panel-header">
         <h2>👤 Users Management</h2>
+        <div className="search-bar">
+          <input
+            placeholder="🔍 Search by name or username..."
+            value={search}
+            onChange={handleSearchChange}
+          />
+        </div>
         <button className="btn btn-primary" onClick={() => { resetForm(); setShowForm(true); }}>
           + Add User
         </button>
@@ -104,7 +121,7 @@ const UsersManager = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((u) => (
+              {filtered.map((u) => (
                 <tr key={u._id}>
                   <td>
                     <div className="student-cell">

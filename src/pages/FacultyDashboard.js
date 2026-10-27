@@ -36,9 +36,9 @@ const FacultyDashboard = () => {
   }, [tab]);
 
   const tabs = [
-    { id: 'students', label: '👨‍🎓 Students', component: <StudentsManager canEdit /> },
+    { id: 'students', label: '👨‍🎓 Students', component: <StudentsManager canEdit={true} canAddStudent={false} /> },
     { id: 'marks', label: '📝 Marks', component: <MarksManager canEdit /> },
-    { id: 'subjects', label: '📚 Subjects', component: <SubjectsManager canEdit={false} /> },
+    { id: 'subjects', label: '📚 Subjects', component: <SubjectsManager canEdit={false} canAddSubject={false} /> },
     { id: 'performance', label: '📊 Performance Index', component: <PerformanceView students={students} marks={marks} /> },
   ];
 
@@ -76,16 +76,33 @@ const FacultyDashboard = () => {
   );
 };
 
-const PerformanceView = ({ students, marks }) => (
-  <div className="panel">
-    <div className="panel-header"><h2>📊 Student Performance Index</h2></div>
-    <div className="perf-grid">
-      {students.map((s) => {
-        const sm = marks.filter((m) => m.student?._id === s._id);
-        return <PerformanceCard key={s._id} student={s} marks={sm} />;
-      })}
+const PerformanceView = ({ students, marks }) => {
+  const [search, setSearch] = useState('');
+
+  const filteredStudents = students.filter((s) =>
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="panel">
+      <div className="panel-header">
+        <h2>📊 Student Performance Index</h2>
+        <div className="search-bar">
+          <input
+            placeholder="🔍 Search students..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
+      <div className="perf-grid">
+        {filteredStudents.map((s) => {
+          const sm = marks.filter((m) => m.student?._id === s._id);
+          return <PerformanceCard key={s._id} student={s} marks={sm} />;
+        })}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default FacultyDashboard;

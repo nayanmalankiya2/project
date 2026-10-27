@@ -10,6 +10,7 @@ const MarksManager = ({ canEdit = false }) => {
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [search, setSearch] = useState('');
 
   const loadData = useCallback(async () => {
     try {
@@ -32,6 +33,15 @@ const MarksManager = ({ canEdit = false }) => {
 
   const studentMarks = (studentId) => marks.filter((m) => m.student?._id === studentId);
   const studentHasMarks = (studentId) => studentMarks(studentId).length > 0;
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const filtered = students.filter(
+    (s) => s.name.toLowerCase().includes(search.toLowerCase()) || 
+           (s.rollNumber && s.rollNumber.toLowerCase().includes(search.toLowerCase()))
+  );
 
   const openForm = (student) => {
     setSelectedStudent(student);
@@ -89,6 +99,13 @@ const MarksManager = ({ canEdit = false }) => {
     <div className="panel">
       <div className="panel-header">
         <h2>📝 Marks Management {!canEdit && <span className="badge badge-neutral">View Only</span>}</h2>
+        <div className="search-bar">
+          <input
+            placeholder="🔍 Search by name, roll number or marks..."
+            value={search}
+            onChange={handleSearchChange}
+          />
+        </div>
       </div>
       {error && <div className="alert alert-error">{error}</div>}
       {loading ? (
@@ -106,10 +123,10 @@ const MarksManager = ({ canEdit = false }) => {
               </tr>
             </thead>
             <tbody>
-              {students.length === 0 && (
+              {filtered.length === 0 && (
                 <tr><td colSpan={subjects.length + (canEdit ? 2 : 1)} className="empty-cell">No students found</td></tr>
               )}
-              {students.map((student) => (
+              {filtered.map((student) => (
                 <tr key={student._id}>
                   <td>
                     <strong>{student.name}</strong>

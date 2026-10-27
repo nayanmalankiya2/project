@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import * as api from '../api';
 
-const SubjectsManager = ({ canEdit = false }) => {
+const SubjectsManager = ({ canEdit = true, canAddSubject = true }) => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: '', code: '', maxMarks: 100 });
+  const [search, setSearch] = useState('');
 
   const loadSubjects = useCallback(async () => {
     try {
@@ -26,6 +27,15 @@ const SubjectsManager = ({ canEdit = false }) => {
   }, [loadSubjects]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const filtered = subjects.filter(
+    (s) => s.name.toLowerCase().includes(search.toLowerCase()) || 
+           s.code.toLowerCase().includes(search.toLowerCase())
+  );
 
   const resetForm = () => {
     setForm({ name: '', code: '', maxMarks: 100 });
@@ -63,7 +73,14 @@ const SubjectsManager = ({ canEdit = false }) => {
     <div className="panel">
       <div className="panel-header">
         <h2>📚 Subjects Management {!canEdit && <span className="badge badge-neutral">View Only</span>}</h2>
-        {canEdit && (
+        <div className="search-bar">
+          <input
+            placeholder="🔍 Search subjects..."
+            value={search}
+            onChange={handleSearchChange}
+          />
+        </div>
+        {canAddSubject && (
           <button className="btn btn-primary" onClick={() => { resetForm(); setShowForm(true); }}>
             + Add Subject
           </button>
@@ -96,7 +113,7 @@ const SubjectsManager = ({ canEdit = false }) => {
               </tr>
             </thead>
             <tbody>
-              {subjects.map((s) => (
+              {filtered.map((s) => (
                 <tr key={s._id}>
                   <td><strong>{s.name}</strong></td>
                   <td><span className="badge badge-neutral">{s.code}</span></td>

@@ -3,7 +3,7 @@ import * as api from '../api';
 import StudentForm from './StudentForm';
 import { computePerformance } from './PerformanceCard';
 
-const StudentsManager = ({ canEdit = true }) => {
+const StudentsManager = ({ canEdit = true, canAddStudent = true }) => {
   const [students, setStudents] = useState([]);
   const [marks, setMarks] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -11,6 +11,7 @@ const StudentsManager = ({ canEdit = true }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
+  const [success, setSuccess] = useState(''); // NEW: success message state
 
   const loadData = useCallback(async () => {
     try {
@@ -36,6 +37,7 @@ const StudentsManager = ({ canEdit = true }) => {
     try {
       await api.createStudent(formData);
       setShowForm(false);
+      setSuccess('Student added successfully'); // NEW: show success message
       loadData();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to add student');
@@ -57,6 +59,7 @@ const StudentsManager = ({ canEdit = true }) => {
     if (window.confirm('Are you sure you want to delete this student?')) {
       try {
         await api.deleteStudent(id);
+        setSuccess('Student deleted successfully'); // NEW: show success message
         loadData();
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to delete student');
@@ -64,9 +67,18 @@ const StudentsManager = ({ canEdit = true }) => {
     }
   };
 
+  // NEW: auto-hide success message after 3 seconds
+  useEffect(() => {
+    let timer;
+    if (success) {
+      timer = setTimeout(() => setSuccess(''), 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [success]);
+
   const filtered = students.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase()) ||
-    s.rollNumber.toLowerCase().includes(search.toLowerCase()) ||
+    s.enrolmentNumber.toLowerCase().includes(search.toLowerCase()) ||
     s.className.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -74,7 +86,7 @@ const StudentsManager = ({ canEdit = true }) => {
     <div className="panel">
       <div className="panel-header">
         <h2>👨‍🎓 Students Management</h2>
-        {canEdit && (
+        {canAddStudent && (
           <button className="btn btn-primary" onClick={() => { setEditing(null); setShowForm(true); }}>
             + Add Student
           </button>
@@ -82,6 +94,7 @@ const StudentsManager = ({ canEdit = true }) => {
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
+  {success && <div className="alert alert-success">{success}</div>}
 
       <div className="search-bar">
         <input
@@ -99,7 +112,7 @@ const StudentsManager = ({ canEdit = true }) => {
             <thead>
               <tr>
                 <th>Student</th>
-                <th>Roll No</th>
+                <th>Enrolment No</th>
                 <th>Class</th>
                 <th>Contact</th>
                 <th>Performance</th>
@@ -125,7 +138,7 @@ const StudentsManager = ({ canEdit = true }) => {
                         </div>
                       </div>
                     </td>
-                    <td>{s.rollNumber}</td>
+                    <td>{s.enrolmentNumber}</td>
                     <td>{s.className}</td>
                     <td>{s.phone || '—'}</td>
                     <td>
