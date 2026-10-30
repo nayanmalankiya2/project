@@ -45,10 +45,10 @@ const seedData = async () => {
 
   // Create students
   const students = await Student.create([
-    { name: 'Aarav Sharma', rollNumber: 'S101', className: '10-A', email: 'aarav@school.com', phone: '9876543210', address: 'Ahmedabad', user: studentUser._id },
-    { name: 'Priya Patel', rollNumber: 'S102', className: '10-A', email: 'priya@school.com', phone: '9876543211', address: 'Gandhinagar' },
-    { name: 'Rohan Mehta', rollNumber: 'S103', className: '10-B', email: 'rohan@school.com', phone: '9876543212', address: 'Surat' },
-    { name: 'Sneha Desai', rollNumber: 'S104', className: '10-B', email: 'sneha@school.com', phone: '9876543213', address: 'Vadodara' },
+    { name: 'Aarav Sharma', enrolmentNumber: '10101', className: '10-A', email: 'aarav@school.com', phone: '9876543210', address: 'Ahmedabad', user: studentUser._id },
+    { name: 'Priya Patel', enrolmentNumber: '10102', className: '10-A', email: 'priya@school.com', phone: '9876543211', address: 'Gandhinagar' },
+    { name: 'Rohan Mehta', enrolmentNumber: '10103', className: '10-B', email: 'rohan@school.com', phone: '9876543212', address: 'Surat' },
+    { name: 'Sneha Desai', enrolmentNumber: '10104', className: '10-B', email: 'sneha@school.com', phone: '9876543213', address: 'Vadodara' },
   ]);
 
   // Create subjects
