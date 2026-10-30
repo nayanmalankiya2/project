@@ -28,7 +28,7 @@ const AdminDashboard = () => {
   }, [tab]);
 
   const tabs = [
-    { id: 'students', label: '👨‍🎓 Students', component: <StudentsManager canEdit={false} /> },
+    { id: 'students', label: '👨‍🎓 Students', component: <StudentsManager canEdit={true} canAddStudent={true} /> },
     { id: 'users', label: '👤 Users', component: <UsersManager /> },
     { id: 'subjects', label: '📚 Subjects', component: <SubjectsManager canEdit /> },
     { id: 'marks', label: '📝 Marks', component: <MarksManager canEdit={false} /> },
